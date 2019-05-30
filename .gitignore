@@ -102,3 +102,12 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# temporary files
+tmp
+
+# data
+data
+
+# vscode settings
+.vscode
