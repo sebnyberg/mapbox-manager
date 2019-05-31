@@ -14,8 +14,8 @@ var rootCmd = &cobra.Command{
 	Short: "mapbox is a CLI wrapper for the Mapbox API",
 	Long: `mapbox - a CLI wrapper for the Mapbox API
 
-The API key and username can be set as environment variables
-MAPBOX_API_KEY and MAPBOX_USERNAME respectively.
+The access token and username can be set as environment variables
+MAPBOX_ACCESS_TOKEN and MAPBOX_USERNAME respectively.
 	`,
 }
 
@@ -24,7 +24,7 @@ var versionCmd = &cobra.Command{
 	Short: "Print the version",
 	Long:  "Print the version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("gchat version %v", "0.1.0")
+		fmt.Printf("mapbox cli version %v", "0.1.0")
 	},
 }
 
@@ -44,9 +44,9 @@ func init() {
 	replacer := strings.NewReplacer("-", "_")
 	viper.SetEnvKeyReplacer(replacer)
 
-	rootCmd.PersistentFlags().String("api-key", "", "Mapbox API key")
+	rootCmd.PersistentFlags().String("access-token", "", "Mapbox access token")
 
-	viper.BindPFlag("api-key", rootCmd.PersistentFlags().Lookup("api-key"))
+	viper.BindPFlag("access-token", rootCmd.PersistentFlags().Lookup("access-token"))
 
 	rootCmd.AddCommand(versionCmd)
 }

@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/spf13/viper"
 
 	"github.com/sebnyberg/mapboxcli/pkg/resource"
@@ -18,10 +20,13 @@ var getCmd = &cobra.Command{
 	Short: "Retrieves all styles",
 	Long:  `Retrieves all styles`,
 	Run: func(cmd *cobra.Command, args []string) {
-		apiKey := viper.Get("api-key")
-		username := viper.Get("username")
+		accessToken := viper.GetString("access-token")
+		username := viper.GetString("username")
 
-		resource.GetStyles(apiKey, username)
+		_, err := resource.GetStyles(accessToken, username)
+		if err != nil {
+			log.Fatal(err)
+		}
 	},
 }
 

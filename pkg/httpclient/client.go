@@ -10,6 +10,8 @@ import (
 	"net/http"
 )
 
+type Request http.Request
+
 type APIResponse struct {
 	Payload    []byte
 	StatusCode int

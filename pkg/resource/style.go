@@ -1,14 +1,11 @@
-package resources
+package resource
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"time"
 )
-
-var something resource = resource{
-	endpoint: "styles",
-	version:  "v1",
-}
 
 type ListStyle struct {
 	Version    int32     `json:"version"`
@@ -24,10 +21,34 @@ type ListStyle struct {
 	Visibility string    `json:"visibility"`
 }
 
-func GetStyles(apiKey string, username string) error {
+func GetStyles(accessToken string, username string) ([]ListStyle, error) {
 	if username == "" {
-		return fmt.Errorf("Username missing, please provide with --username/-u")
+		return nil, fmt.Errorf("Username missing, please provide with --username/-u")
 	}
 
-	return nil
+	if accessToken == "" {
+		return nil, fmt.Errorf("Access token is missing, please provide with --access-token or env: MAPBOX_ACCESS_TOKEN")
+	}
+
+	client := GetDefaultClient(accessToken)
+
+	endpoint := fmt.Sprintf("/styles/v1/%v", username)
+
+	res, err := client.Get(endpoint, nil, nil)
+	if err != nil {
+		log.Fatalf("Failed to fetch styles for user: %v", err)
+	}
+
+	var styles []ListStyle
+	if err := json.Unmarshal(res.Payload, &styles); err != nil {
+		log.Fatalf("Failed to parse styles: %v", err)
+	}
+
+	out, err := json.Marshal(styles)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(out))
+
+	return styles, nil
 }
