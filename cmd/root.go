@@ -5,8 +5,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/spf13/cobra"
+	"github.com/sebnyberg/mapboxcli/pkg/config"
+
 	"github.com/spf13/viper"
+
+	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
@@ -41,12 +44,14 @@ func init() {
 	viper.SetEnvPrefix("MAPBOX")
 	viper.AutomaticEnv()
 
+	// MAPBOX_MY_VAR -> my-var
 	replacer := strings.NewReplacer("-", "_")
 	viper.SetEnvKeyReplacer(replacer)
 
-	rootCmd.PersistentFlags().String("access-token", "", "Mapbox access token")
+	viper.AddConfigPath(config.GetConfigPath())
 
-	viper.BindPFlag("access-token", rootCmd.PersistentFlags().Lookup("access-token"))
+	// rootCmd.PersistentFlags().String("access-token", "", "Mapbox access token")
+	// viper.BindPFlag("access-token", rootCmd.PersistentFlags().Lookup("access-token"))
 
 	rootCmd.AddCommand(versionCmd)
 }

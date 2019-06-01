@@ -1,42 +1,47 @@
 package cmd
 
-import (
-	"log"
+// import (
+// 	"log"
 
-	"github.com/spf13/viper"
+// 	"github.com/spf13/viper"
 
-	"github.com/sebnyberg/mapboxcli/pkg/resource"
-	"github.com/spf13/cobra"
-)
+// 	"github.com/sebnyberg/mapboxcli/pkg/resource"
+// 	"github.com/spf13/cobra"
+// )
 
-var styleCmd = &cobra.Command{
-	Use:   "style",
-	Short: "style commands",
-	Long:  `mapbox style`,
-}
+// var styleCmd = &cobra.Command{
+// 	Use:   "style",
+// 	Short: "style commands",
+// 	Long:  `mapbox style`,
+// }
 
-var getCmd = &cobra.Command{
-	Use:   "get",
-	Short: "Retrieves all styles",
-	Long:  `Retrieves all styles`,
-	Run: func(cmd *cobra.Command, args []string) {
-		accessToken := viper.GetString("access-token")
-		username := viper.GetString("username")
+// var getCmd = &cobra.Command{
+// 	Use:   "get",
+// 	Short: "Retrieves all styles",
+// 	Long:  `Retrieves all styles`,
+// 	Run: func(cmd *cobra.Command, args []string) {
+// 		accessToken := viper.GetString("access-token")
+// 		username := viper.GetString("username")
 
-		_, err := resource.GetStyles(accessToken, username)
-		if err != nil {
-			log.Fatal(err)
-		}
-	},
-}
+// 		err := viper.WriteConfigAs("config.yml")
+// 		if err != nil {
+// 			log.Fatal("Failed to write config")
+// 		}
 
-func init() {
-	getCmd.PersistentFlags().StringP("username", "u", "", "Username (required)")
-	getCmd.MarkFlagRequired("username")
+// 		_, err = resource.GetStyles(accessToken, username)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+// 	},
+// }
 
-	viper.BindPFlag("username", getCmd.PersistentFlags().Lookup("username"))
+// func init() {
+// 	getCmd.PersistentFlags().StringP("username", "u", "", "Username (required)")
+// 	getCmd.MarkFlagRequired("username")
 
-	rootCmd.AddCommand(styleCmd)
+// 	viper.BindPFlag("username", getCmd.PersistentFlags().Lookup("username"))
 
-	styleCmd.AddCommand(getCmd)
-}
+// 	rootCmd.AddCommand(styleCmd)
+
+// 	styleCmd.AddCommand(getCmd)
+// }

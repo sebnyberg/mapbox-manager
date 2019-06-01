@@ -6,6 +6,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/go-chi/chi v4.0.2+incompatible // indirect
 	github.com/go-chi/render v1.0.1 // indirect
+	github.com/gobuffalo/envy v1.7.0 // indirect
 	github.com/gohugoio/hugo v0.55.6
 	github.com/mongodb/mongo-go-driver v1.0.2 // indirect
 	github.com/russross/blackfriday v2.0.0+incompatible // indirect
