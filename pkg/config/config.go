@@ -19,12 +19,12 @@ const (
 
 var allowedOptions map[string]bool = map[string]bool{
 	"access-token": true,
-	"username": true,
-	"style-id": true,
+	"username":     true,
+	"style-id":     true,
 }
 
 var sensitiveOptions map[string]bool = map[string]bool{
-	"access-token" : true,
+	"access-token": true,
 }
 
 func GetOptions() []string {
@@ -98,7 +98,6 @@ func ToString(showSensitive bool) (string, error) {
 	v.AddConfigPath(configDir)
 
 	if err := v.ReadInConfig(); err != nil {
-
 		return "", err
 	}
 

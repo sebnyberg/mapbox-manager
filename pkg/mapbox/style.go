@@ -12,46 +12,34 @@ type ListStyle struct {
 	Name       string    `json:"name"`
 	Owner      string    `json:"owner"`
 	Version    int32     `json:"version"`
-	Center     []float64 `json:"center"`
-	Zoom       float64   `json:"zoom"`
-	Bearing    float64   `json:"bearing"`
-	Pitch      float64   `json:"pitch"`
+	Center     []float64 `json:"center,omitempty"`
+	Zoom       float64   `json:"zoom,omitempty"`
+	Bearing    float64   `json:"bearing,omitempty"`
+	Pitch      float64   `json:"pitch,omitempty"`
 	Created    time.Time `json:"created"`
 	Modified   time.Time `json:"modified"`
 	Visibility string    `json:"visibility"`
 }
 
+// For more info, see https://docs.mapbox.com/mapbox-gl-js/style-spec/
 type Style struct {
-	Id         string                 `json:"id"`
-	Name       string                 `json:"name"`
-	Owner      string                 `json:"owner"`
-	Version    int32                  `json:"version"`
-	Metadata   map[string]interface{} `json:"metadata"`
-	Zoom       float32                `json:"zoom"`
-	Sprite     string                 `json:"sprite"`
-	Center     []float64              `json:"center"`
-	Bearing    float64                `json:"bearing"`
-	Pitch      float64                `json:"pitch"`
+	Id       string                 `json:"id"`
+	Name     string                 `json:"name,omitempty"`
+	Owner    string                 `json:"owner"`
+	Version  int32                  `json:"version"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	Sprite   string                 `json:"sprite,omitempty"`
+	Glyphs   string                 `json:"glyphs,omitempty"`
+	// View options
+	Zoom       float32                `json:"zoom,omitempty"`
+	Center     []float64              `json:"center,omitempty"`
+	Bearing    float64                `json:"bearing,omitempty"`
+	Pitch      float64                `json:"pitch,omitempty"`
+	Light      float64                `json:"light,omitempty"`
+	Transition map[string]interface{} `json:"transition,omitempty"`
 	Draft      bool                   `json:"draft"`
-	Created    time.Time              `json:"created"`
-	Modified   time.Time              `json:"modified"`
-	Visibility string                 `json:"visibility"`
-	Layers     []Layer                `json:"layers"`
-	Sources    Sources                `json:"sources"`
-}
-
-type NewStyle struct {
-	Id         string                 `json:"id"`
-	Name       string                 `json:"name"`
-	Owner      string                 `json:"owner"`
-	Version    int32                  `json:"version"`
-	Metadata   map[string]interface{} `json:"metadata"`
-	Zoom       float32                `json:"zoom"`
-	Sprite     string                 `json:"sprite"`
-	Center     []float64              `json:"center"`
-	Bearing    float64                `json:"bearing"`
-	Pitch      float64                `json:"pitch"`
-	Draft      bool                   `json:"draft"`
+	Created    time.Time              `json:"created,omitempty"`
+	Modified   time.Time              `json:"modified,omitempty"`
 	Visibility string                 `json:"visibility"`
 	Layers     []Layer                `json:"layers"`
 	Sources    Sources                `json:"sources"`
@@ -79,10 +67,14 @@ func GetStyles(accessToken string, username string) ([]ListStyle, error) {
 	return styles, nil
 }
 
-func GetStyle(accessToken string, username string, styleId string) (*Style, error) {
+func GetStyle(accessToken string, username string, styleId string, draft bool) (*Style, error) {
 	client := GetDefaultClient(accessToken)
 
 	endpoint := fmt.Sprintf("/styles/v1/%v/%v", username, styleId)
+
+	if draft {
+		endpoint += "/draft"
+	}
 
 	res, err := client.Get(endpoint, nil, nil)
 	if err != nil {

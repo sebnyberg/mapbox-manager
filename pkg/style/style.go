@@ -19,7 +19,7 @@ func formatStyleList(styles []mapbox.ListStyle, outputFormat string) (string, er
 	panic("Unsupported output format..")
 }
 
-func formatStyle(style *mapbox.Style, outputFormat string) (string, error) {
+func formatStyle(style mapbox.Style, outputFormat string) (string, error) {
 	switch outputFormat {
 	case "table":
 		return StyleToTable(style)
@@ -61,7 +61,7 @@ func StyleListToJson(styles []mapbox.ListStyle) (string, error) {
 	return fmt.Sprintln(string(jsonStr)), nil
 }
 
-func StyleToTable(style *mapbox.Style) (string, error) {
+func StyleToTable(style mapbox.Style) (string, error) {
 	var buf bytes.Buffer
 
 	table := tablewriter.NewWriter(&buf)
@@ -82,14 +82,14 @@ func StyleToTable(style *mapbox.Style) (string, error) {
 	return buf.String(), nil
 }
 
-func StyleToJson(style *mapbox.Style) (string, error) {
-	jsonStr, err := json.Marshal(style)
+func StyleToJson(style mapbox.Style) (string, error) {
+	b, err := json.Marshal(&style)
 
 	if err != nil {
 		return "", fmt.Errorf("failed parse response: %v", err)
 	}
 
-	return fmt.Sprintln(string(jsonStr)), nil
+	return string(b), nil
 }
 
 func GetAll(accessToken string, username string, outputFormat string) (string, error) {
@@ -110,17 +110,17 @@ func GetAll(accessToken string, username string, outputFormat string) (string, e
 	return s, nil
 }
 
-func Get(accessToken string, username string, styleId string, outputFormat string) (string, error) {
+func Get(accessToken string, username string, styleId string, outputFormat string, draft bool) (string, error) {
 	if err := checkFormatAvailable(outputFormat); err != nil {
 		return "", err
 	}
 
-	style, err := mapbox.GetStyle(accessToken, username, styleId)
+	style, err := mapbox.GetStyle(accessToken, username, styleId, draft)
 	if err != nil {
 		return "", err
 	}
 
-	s, err := formatStyle(style, outputFormat)
+	s, err := formatStyle(*style, outputFormat)
 
 	return s, err
 }
