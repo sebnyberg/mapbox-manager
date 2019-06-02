@@ -7,7 +7,6 @@ import (
 	"github.com/sebnyberg/mapboxcli/pkg/config"
 
 	"github.com/spf13/viper"
-
 	"github.com/spf13/cobra"
 )
 
@@ -72,7 +71,9 @@ var showConfigCmd = &cobra.Command{
 
 Lists configuration options found in ~/.mapboxcli/config.yml`,
 	Run: func(cmd *cobra.Command, args []string) {
-		s, err := config.String()
+		showSensitive := viper.GetBool("show-sensitive")
+
+		s, err := config.ToString(showSensitive)
 		if err != nil {
 			fmt.Println("Configuration not set. See `mapbox config set`")
 		} else {
@@ -89,6 +90,10 @@ func init() {
 	viper.BindPFlag("access-token", setConfigCmd.Flags().Lookup("access-token"))
 	viper.BindPFlag("username", setConfigCmd.Flags().Lookup("username"))
 	viper.BindPFlag("style-id", setConfigCmd.Flags().Lookup("style-id"))
+
+
+	showConfigCmd.Flags().Bool("show-sensitive", false, "show sensitive information, default: false")
+	viper.BindPFlag("show-sensitive", showConfigCmd.Flags().Lookup("show-sensitive"))
 
 	configCmd.AddCommand(setConfigCmd)
 	configCmd.AddCommand(resetConfigCmd)

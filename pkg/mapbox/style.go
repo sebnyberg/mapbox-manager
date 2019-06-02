@@ -44,12 +44,16 @@ func GetStyles(accessToken string, username string) ([]ListStyle, error) {
 
 	res, err := client.Get(endpoint, nil, nil)
 	if err != nil {
-		log.Fatalf("Failed to fetch styles for user: %v", err)
+		log.Fatalf("failed to fetch styles for user: %v", err)
+	}
+
+	if res.StatusCode > 200 {
+		return nil, fmt.Errorf("failed to fetch styles: %v", GetErrorMessage(res.StatusCode, res.Payload))
 	}
 
 	var styles []ListStyle
 	if err := json.Unmarshal(res.Payload, &styles); err != nil {
-		log.Fatalf("Failed to parse styles: %v", err)
+		log.Fatalf("failed to parse styles: %v", err)
 	}
 
 	out, err := json.Marshal(styles)

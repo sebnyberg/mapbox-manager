@@ -17,14 +17,22 @@ const (
 	DEFAULT_CONFIG_NAME string = "config.yml"
 )
 
-var allowedOptions []string = []string{
-	"access-token",
-	"username",
-	"style-id",
+var allowedOptions map[string]bool = map[string]bool{
+	"access-token": true,
+	"username": true,
+	"style-id": true,
+}
+
+var sensitiveOptions map[string]bool = map[string]bool{
+	"access-token" : true,
 }
 
 func GetOptions() []string {
-	return allowedOptions
+	optsList := make([]string, 0)
+	for option := range allowedOptions {
+		optsList = append(optsList, option)
+	}
+	return optsList
 }
 
 func GetDir() string {
@@ -61,7 +69,7 @@ func Write() error {
 
 	v := viper.New()
 
-	for _, opt := range allowedOptions {
+	for opt, _ := range allowedOptions {
 		val := viper.GetString(opt)
 		if val != "" {
 			writingValues = true
@@ -82,7 +90,7 @@ func Write() error {
 	return nil
 }
 
-func String() (string, error) {
+func ToString(showSensitive bool) (string, error) {
 	configDir := GetDir()
 
 	v := viper.New()
@@ -90,12 +98,21 @@ func String() (string, error) {
 	v.AddConfigPath(configDir)
 
 	if err := v.ReadInConfig(); err != nil {
+
 		return "", err
 	}
 
 	sb := strings.Builder{}
 
-	for _, opt := range allowedOptions {
+	for opt, _ := range allowedOptions {
+		// Hide sensitive information
+		if !showSensitive {
+			if sensitive, ok := sensitiveOptions[opt]; ok && sensitive {
+				sb.WriteString(fmt.Sprintf("%v: HIDDEN (show with --show-sensitive)\n", opt))
+				continue
+			}
+		}
+
 		stringVal := v.GetString(opt)
 		if stringVal != "" {
 			sb.WriteString(fmt.Sprintf("%v: %v\n", opt, stringVal))
