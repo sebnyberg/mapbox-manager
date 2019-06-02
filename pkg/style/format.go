@@ -4,16 +4,15 @@ import (
 	"fmt"
 )
 
-
-var availableFormats map[string]bool = map[string]bool {
+var availableFormats map[string]bool = map[string]bool{
 	"table": true,
-	"id": false,
-	"yaml": false,
-	"json": false,
+	"id":    false,
+	"yaml":  false,
+	"json":  true,
 }
 
 func checkFormatAvailable(outputFormat string) error {
-	if _, ok := availableFormats[outputFormat]; !ok {
+	if available, ok := availableFormats[outputFormat]; !ok || !available {
 		return fmt.Errorf("format not yet available: %v", outputFormat)
 	}
 

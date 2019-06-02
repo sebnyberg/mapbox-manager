@@ -32,7 +32,7 @@ For more detailed information about a style, use
 		accessToken := viper.GetString("access-token")
 		outputFormat := viper.GetString("output")
 
-		s, err := style.Get(accessToken, username, outputFormat)
+		s, err := style.GetAll(accessToken, username, outputFormat)
 		if err != nil {
 			fmt.Println(err)
 			return
