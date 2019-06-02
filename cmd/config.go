@@ -8,28 +8,42 @@ import (
 
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "mapbox config - store configuration for re-use",
-	Long: `mapbox config
+	Short: "mbstyle config - store configuration for re-use",
+	Long: `mbstyle config
 Stores commandline flags for re-use in ~/.mapboxcli/config.yml
 
 Supported commands:
 
-mapbox config set --username myuser --access-token mytoken --style-id abc123
-mapbox config reset
-mapbox config show
+mbstyle config set --username myuser --access-token mytoken --style-id abc123
+mbstyle config reset
+mbstyle config show
 
-Any flags set in the config will be automatically passed to other commands.
+Flags set in the config will be automatically passed to other commands.
 
-Precedence is in following order:
+Precedence ordering:
 	1. flag
 	2. env
 	3. config
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
-		// if err := config.WriteConfig(); err != nil {
-		// 	log.Fatalf("Failed to write config: %v", err)
-		// }
+	},
+}
+
+var setConfigCmd = &cobra.Command{
+	Use:   "config",
+	Short: "mbstyle config set - set configuration for re-use",
+	Long: `mbstyle config set --<flagname> <value>
+Stores commandline flags for re-use in ~/.mapboxcli/config.yml
+
+Supported flags:
+
+--username
+--access-token
+--style-id
+`,
+	Run: func(cmd *cobra.Command, args []string) {
+		cmd.Help()
 	},
 }
 

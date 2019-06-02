@@ -1,6 +1,6 @@
 package main
 
-import "github.com/sebnyberg/mapboxcli/cmd"
+import "github.com/sebnyberg/mbstyle/cmd"
 
 func main() {
 	cmd.Execute()

@@ -1,18 +1,15 @@
-# mapbox-manager
+# mbstyle
 
-Convenience library for managing Mapbox resources. The features found here were implemented specifically to support the use-cases I had when working with Mapbox.
+Convenience library for managing Mapbox styles.
 
-## Todo
+DISCLAIMER: this is NOT an official Mapbox library. For the official Mapbox CLI [go here](https://github.com/mapbox/mapbox-cli-py)
 
-Travis CI
+## Getting started
 
-## Publishing
-
-This project uses [Poetry](https://poetry.eustace.io/) to manage packages and publishing.
-
-Build and publish with:
+mapboxcli uses the public Mapbox API Layers v1 endpoint to enable management of Mapbox styles. To install, run:
 
 ```bash
-poetry build
-poetry publish
+go get -u github.com/sebnyberg/mapboxcli
+
+mbstyle --help
 ```

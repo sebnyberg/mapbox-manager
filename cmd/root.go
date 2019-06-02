@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/sebnyberg/mapboxcli/pkg/config"
+	"github.com/sebnyberg/mbstyle/pkg/config"
 
 	"github.com/spf13/viper"
 
@@ -13,9 +13,9 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "mapbox",
-	Short: "mapbox is a CLI wrapper for the Mapbox API",
-	Long: `mapbox - a CLI wrapper for the Mapbox API
+	Use:   "mbstyle",
+	Short: "mbstyle is a CLI wrapper for the Mapbox API",
+	Long: `mbstyle - a CLI wrapper for the Mapbox API
 
 The access token and username can be set as environment variables
 MAPBOX_ACCESS_TOKEN and MAPBOX_USERNAME respectively.

@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	DEFAULT_APP_DIR     string = ".mapboxcli"
+	DEFAULT_APP_DIR     string = ".mbstyle"
 	DEFAULT_CONFIG_NAME string = "config.yml"
 )
 

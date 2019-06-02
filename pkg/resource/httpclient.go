@@ -3,7 +3,7 @@ package resource
 import (
 	"fmt"
 
-	"github.com/sebnyberg/mapboxcli/pkg/httpclient"
+	"github.com/sebnyberg/mbstyle/pkg/httpclient"
 )
 
 var API_URL string = "https://api.mapbox.com"
