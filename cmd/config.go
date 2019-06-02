@@ -6,8 +6,8 @@ import (
 
 	"github.com/sebnyberg/mapboxcli/pkg/config"
 
-	"github.com/spf13/viper"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var configCmd = &cobra.Command{
@@ -44,12 +44,15 @@ Stores commandline flags for re-use in ~/.mapboxcli/config.yml
 Supported flags:
 
 --` + strings.Join(config.GetOptions(), "\n--"),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		err := config.Write()
+
 		if err != nil {
 			fmt.Printf("Failed to set config: %v\n", err)
-			fmt.Println("See `mapbox config set --help`")
+			return err
 		}
+
+		return nil
 	},
 }
 
@@ -70,15 +73,17 @@ var showConfigCmd = &cobra.Command{
 	Long: `mapbox config show 
 
 Lists configuration options found in ~/.mapboxcli/config.yml`,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		showSensitive := viper.GetBool("show-sensitive")
 
 		s, err := config.ToString(showSensitive)
 		if err != nil {
-			fmt.Println("Configuration not set. See `mapbox config set`")
-		} else {
-			fmt.Print(s)
+			return err
 		}
+
+		fmt.Print(s)
+
+		return nil
 	},
 }
 
@@ -90,7 +95,6 @@ func init() {
 	viper.BindPFlag("access-token", setConfigCmd.Flags().Lookup("access-token"))
 	viper.BindPFlag("username", setConfigCmd.Flags().Lookup("username"))
 	viper.BindPFlag("style-id", setConfigCmd.Flags().Lookup("style-id"))
-
 
 	showConfigCmd.Flags().Bool("show-sensitive", false, "show sensitive information, default: false")
 	viper.BindPFlag("show-sensitive", showConfigCmd.Flags().Lookup("show-sensitive"))

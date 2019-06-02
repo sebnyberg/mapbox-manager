@@ -41,6 +41,33 @@ For more detailed information about a style, use
 	},
 }
 
+var styleCmd = &cobra.Command{
+	Use:   "style",
+	Short: "get style",
+	Long:  `mapbox get style - get style`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := exitIfMissing([]string{"username", "access-token", "style-id"})
+		if err != nil {
+			return err
+		}
+
+		username := viper.GetString("username")
+		accessToken := viper.GetString("access-token")
+		outputFormat := viper.GetString("output")
+		styleId := viper.GetString("style-id")
+
+		s, err := style.Get(accessToken, username, styleId, outputFormat)
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+
+		fmt.Printf(s)
+
+		return nil
+	},
+}
+
 func init() {
 	getCmd.PersistentFlags().StringP("username", "u", "", "username (required)")
 	getCmd.PersistentFlags().String("access-token", "", "access token (required)")
@@ -50,7 +77,12 @@ func init() {
 	viper.BindPFlag("access-token", getCmd.PersistentFlags().Lookup("access-token"))
 	viper.BindPFlag("output", getCmd.PersistentFlags().Lookup("output"))
 
+	styleCmd.Flags().String("style-id", "", "style id")
+
+	viper.BindPFlag("style-id", styleCmd.Flags().Lookup("style-id"))
+
 	getCmd.AddCommand(stylesCmd)
+	getCmd.AddCommand(styleCmd)
 
 	rootCmd.AddCommand(getCmd)
 

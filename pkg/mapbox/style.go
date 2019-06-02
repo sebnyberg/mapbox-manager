@@ -21,23 +21,43 @@ type ListStyle struct {
 	Visibility string    `json:"visibility"`
 }
 
-func GetTableHeader() string {
-	return "name, version"
+type Style struct {
+	Id         string                 `json:"id"`
+	Name       string                 `json:"name"`
+	Owner      string                 `json:"owner"`
+	Version    int32                  `json:"version"`
+	Metadata   map[string]interface{} `json:"metadata"`
+	Zoom       float32                `json:"zoom"`
+	Sprite     string                 `json:"sprite"`
+	Center     []float64              `json:"center"`
+	Bearing    float64                `json:"bearing"`
+	Pitch      float64                `json:"pitch"`
+	Draft      bool                   `json:"draft"`
+	Created    time.Time              `json:"created"`
+	Modified   time.Time              `json:"modified"`
+	Visibility string                 `json:"visibility"`
+	Layers     []Layer                `json:"layers"`
+	Sources    Sources                `json:"sources"`
 }
 
-func (row *ListStyle) AsTableRow() string {
-	return "abc123, 2"
+type NewStyle struct {
+	Id         string                 `json:"id"`
+	Name       string                 `json:"name"`
+	Owner      string                 `json:"owner"`
+	Version    int32                  `json:"version"`
+	Metadata   map[string]interface{} `json:"metadata"`
+	Zoom       float32                `json:"zoom"`
+	Sprite     string                 `json:"sprite"`
+	Center     []float64              `json:"center"`
+	Bearing    float64                `json:"bearing"`
+	Pitch      float64                `json:"pitch"`
+	Draft      bool                   `json:"draft"`
+	Visibility string                 `json:"visibility"`
+	Layers     []Layer                `json:"layers"`
+	Sources    Sources                `json:"sources"`
 }
 
 func GetStyles(accessToken string, username string) ([]ListStyle, error) {
-	if username == "" {
-		return nil, fmt.Errorf("Username missing, please provide with --username/-u")
-	}
-
-	if accessToken == "" {
-		return nil, fmt.Errorf("Access token is missing, please provide with --access-token or env: MAPBOX_ACCESS_TOKEN")
-	}
-
 	client := GetDefaultClient(accessToken)
 
 	endpoint := fmt.Sprintf("/styles/v1/%v", username)
@@ -59,34 +79,24 @@ func GetStyles(accessToken string, username string) ([]ListStyle, error) {
 	return styles, nil
 }
 
-func GetStyle(accessToken string, username string, styleId string) ([]ListStyle, error) {
-	if username == "" {
-		return nil, fmt.Errorf("Username missing, please provide with --username/-u")
-	}
-
-	if accessToken == "" {
-		return nil, fmt.Errorf("Access token is missing, please provide with --access-token or env: MAPBOX_ACCESS_TOKEN")
-	}
-
+func GetStyle(accessToken string, username string, styleId string) (*Style, error) {
 	client := GetDefaultClient(accessToken)
 
-	endpoint := fmt.Sprintf("/styles/v1/%v", username)
+	endpoint := fmt.Sprintf("/styles/v1/%v/%v", username, styleId)
 
 	res, err := client.Get(endpoint, nil, nil)
 	if err != nil {
 		log.Fatalf("Failed to fetch styles for user: %v", err)
 	}
 
-	var styles []ListStyle
-	if err := json.Unmarshal(res.Payload, &styles); err != nil {
+	if res.StatusCode > 200 {
+		return nil, fmt.Errorf("failed to fetch style: %v", GetErrorMessage(res.StatusCode, res.Payload))
+	}
+
+	var style Style
+	if err := json.Unmarshal(res.Payload, &style); err != nil {
 		log.Fatalf("Failed to parse styles: %v", err)
 	}
 
-	out, err := json.Marshal(styles)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(string(out))
-
-	return styles, nil
+	return &style, nil
 }
