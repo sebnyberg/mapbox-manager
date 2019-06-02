@@ -1,12 +1,14 @@
 package mapbox
 
 import (
-	"github.com/sebnyberg/mapboxcli/pkg/httpclient"
 	"fmt"
+
+	"github.com/sebnyberg/mapboxcli/pkg/httpclient"
 )
 
 var statusErrors map[int]string = map[int]string{
 	401: "please verify usename and access token",
+	422: "payload improperly formatted",
 }
 
 func GetErrorMessage(statusCode int, payload []byte) string {

@@ -8,7 +8,7 @@ import (
 )
 
 type ListStyle struct {
-	Id         string    `json:"id"`
+	ID         string    `json:"id"`
 	Name       string    `json:"name"`
 	Owner      string    `json:"owner"`
 	Version    int32     `json:"version"`
@@ -23,7 +23,7 @@ type ListStyle struct {
 
 // For more info, see https://docs.mapbox.com/mapbox-gl-js/style-spec/
 type Style struct {
-	Id       string                 `json:"id"`
+	ID       string                 `json:"id"`
 	Name     string                 `json:"name,omitempty"`
 	Owner    string                 `json:"owner"`
 	Version  int32                  `json:"version"`
@@ -38,8 +38,8 @@ type Style struct {
 	Light      float64                `json:"light,omitempty"`
 	Transition map[string]interface{} `json:"transition,omitempty"`
 	Draft      bool                   `json:"draft"`
-	Created    time.Time              `json:"created,omitempty"`
-	Modified   time.Time              `json:"modified,omitempty"`
+	Created    *time.Time             `json:"created,omitempty"`
+	Modified   *time.Time             `json:"modified,omitempty"`
 	Visibility string                 `json:"visibility"`
 	Layers     []Layer                `json:"layers"`
 	Sources    Sources                `json:"sources"`
@@ -91,4 +91,30 @@ func GetStyle(accessToken string, username string, styleId string, draft bool) (
 	}
 
 	return &style, nil
+}
+
+func UpdateStyle(accessToken string, username string, styleId string, draft bool, style Style) error {
+	client := GetDefaultClient(accessToken)
+
+	endpoint := fmt.Sprintf("/styles/v1/%v/%v", username, styleId)
+
+	if draft {
+		endpoint += "/draft"
+	}
+
+	b, err := json.Marshal(&style)
+	if err != nil {
+		return err
+	}
+
+	res, err := client.Patch(endpoint, nil, nil, b)
+	if err != nil {
+		return fmt.Errorf("failed to update style: %v", err)
+	}
+
+	if res.StatusCode == 422 {
+		return fmt.Errorf("style was improperly formatted: %v", GetErrorMessage(res.StatusCode, res.Payload))
+	}
+
+	return nil
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/sebnyberg/mapboxcli/pkg/layer"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -36,9 +37,9 @@ var updateLayerSetTilesetCmd = &cobra.Command{
 		bindUpdateFlags()
 		bindUpdateLayerFlags()
 
-		viper.BindPFlag("new-tileset-id", updateLayerCmd.PersistentFlags().Lookup("tileset-id"))
+		viper.BindPFlag("tileset-id", cmd.Flags().Lookup("tileset-id"))
 
-		err := exitIfMissing([]string{"username", "access-token", "style-id", "layer-id", "new-tileset-id"})
+		err := exitIfMissing([]string{"username", "access-token", "style-id", "layer-id", "tileset-id"})
 		if err != nil {
 			return err
 		}
@@ -46,26 +47,18 @@ var updateLayerSetTilesetCmd = &cobra.Command{
 		accessToken := viper.GetString("access-token")
 		username := viper.GetString("username")
 
-		styleId := viper.GetString("style-id")
-		layerId := viper.GetString("layer-id")
+		styleID := viper.GetString("style-id")
+		layerID := viper.GetString("layer-id")
 		draft := viper.GetBool("draft")
 
-		newTilesetId := viper.GetString("new-tileset-id")
+		newTilesetID := viper.GetString("tileset-id")
 
-		err = layer.SetTileset(accessToken, username, styleId, layerId, draft, newTilesetId)
+		err = layer.SetTileset(accessToken, username, styleID, layerID, draft, newTilesetID)
 		if err != nil {
 			return err
 		}
 
-		fmt.Printf("Successfully set the tileset of layer %v to %v\n", layerId, newTilesetId)
-
-		return nil
-
-		// s, err := style.GetAll(outputFormat, accessToken, username)
-		// if err != nil {
-		// 	return err
-		// }
-		// fmt.Printf(s)
+		fmt.Printf("Successfully set the tileset of layer %v to %v\n", layerID, newTilesetID)
 
 		return nil
 	},
@@ -82,12 +75,12 @@ func init() {
 	updateCmd.PersistentFlags().String("access-token", "", "access token (required)")
 
 	// update layer
-	updateLayerCmd.PersistentFlags().StringP("style-id", "s", "", "style id")
-	updateLayerCmd.PersistentFlags().StringP("layer-id", "l", "", "layer id")
+	updateLayerCmd.PersistentFlags().String("style-id", "", "style id")
+	updateLayerCmd.PersistentFlags().String("layer-id", "", "layer id")
 	updateLayerCmd.PersistentFlags().Bool("draft", false, "retrieve draft version")
 
 	// update layer set-tileset
-	updateLayerSetTilesetCmd.PersistentFlags().Bool("new-tileset", false, "tileset id")
+	updateLayerSetTilesetCmd.Flags().String("tileset-id", "", "new tileset id")
 
 	updateLayerCmd.AddCommand(updateLayerSetTilesetCmd)
 

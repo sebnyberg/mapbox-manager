@@ -2,7 +2,7 @@ package mapbox
 
 // For more info see https://docs.mapbox.com/mapbox-gl-js/style-spec/#layers
 type Layer struct {
-	Id          string                 `json:"id"`
+	ID          string                 `json:"id"`
 	Type        string                 `json:"type"`
 	Paint       map[string]interface{} `json:"paint"`
 	Source      string                 `json:"source,omitempty"`

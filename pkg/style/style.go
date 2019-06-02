@@ -39,7 +39,7 @@ func StyleListToTable(styles []mapbox.ListStyle) (string, error) {
 
 	for _, style := range styles {
 		rowData := []string{
-			style.Id,
+			style.ID,
 			style.Name,
 			style.Owner,
 		}
@@ -70,7 +70,7 @@ func StyleToTable(style mapbox.Style) (string, error) {
 	data := make([][]string, 0)
 
 	rowData := []string{
-		style.Id,
+		style.ID,
 		style.Name,
 		style.Owner,
 	}
@@ -110,12 +110,12 @@ func GetAll(outputFormat string, accessToken string, username string) (string, e
 	return s, nil
 }
 
-func Get(outputFormat string, accessToken string, username string, styleId string, draft bool) (string, error) {
+func Get(outputFormat string, accessToken string, username string, styleID string, draft bool) (string, error) {
 	if err := checkFormatAvailable(outputFormat); err != nil {
 		return "", err
 	}
 
-	style, err := mapbox.GetStyle(accessToken, username, styleId, draft)
+	style, err := mapbox.GetStyle(accessToken, username, styleID, draft)
 	if err != nil {
 		return "", err
 	}

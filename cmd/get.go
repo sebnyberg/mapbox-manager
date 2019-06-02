@@ -65,12 +65,12 @@ var getStyleCmd = &cobra.Command{
 
 		accessToken := viper.GetString("access-token")
 		username := viper.GetString("username")
-		styleId := viper.GetString("style-id")
+		styleID := viper.GetString("style-id")
 
 		draft := viper.GetBool("draft")
 		outputFormat := viper.GetString("output")
 
-		s, err := style.Get(outputFormat, accessToken, username, styleId, draft)
+		s, err := style.Get(outputFormat, accessToken, username, styleID, draft)
 		if err != nil {
 			return err
 		}
@@ -101,13 +101,13 @@ The layer id is the name of the layer in Mapbox Studio.`,
 
 		accessToken := viper.GetString("access-token")
 		username := viper.GetString("username")
-		styleId := viper.GetString("style-id")
-		layerId := viper.GetString("layer-id")
+		styleID := viper.GetString("style-id")
+		layerID := viper.GetString("layer-id")
 		draft := viper.GetBool("draft")
 
 		outputFormat := viper.GetString("output")
 
-		s, err := layer.Get(outputFormat, accessToken, username, styleId, layerId, draft)
+		s, err := layer.Get(outputFormat, accessToken, username, styleID, layerID, draft)
 		if err != nil {
 			return err
 		}
@@ -137,12 +137,12 @@ The layer ids are the names of the layers in Mapbox Studio.`,
 
 		accessToken := viper.GetString("access-token")
 		username := viper.GetString("username")
-		styleId := viper.GetString("style-id")
+		styleID := viper.GetString("style-id")
 		draft := viper.GetBool("draft")
 
 		outputFormat := viper.GetString("output")
 
-		s, err := layer.GetAll(outputFormat, accessToken, username, styleId, draft)
+		s, err := layer.GetAll(outputFormat, accessToken, username, styleID, draft)
 		if err != nil {
 			return err
 		}

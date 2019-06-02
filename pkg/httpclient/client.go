@@ -169,6 +169,23 @@ func (c *Client) Get(url string, headers map[string]string, params map[string]in
 	return c.performRequest(r, headers, params)
 }
 
+func (c *Client) Patch(url string, headers map[string]string, params map[string]interface{}, payload []byte) (*APIResponse, error) {
+	finalURL := c.baseURL + url
+
+	if payload == nil {
+		return nil, errors.New("Cannot PATCH without a payload")
+	}
+
+	payloadBuffer := bytes.NewBuffer(payload)
+
+	r, err := http.NewRequest(http.MethodPatch, finalURL, payloadBuffer)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to create request: %v", err)
+	}
+
+	return c.performRequest(r, headers, params)
+}
+
 func (c *Client) Delete(url string, headers map[string]string, params map[string]interface{}) (*APIResponse, error) {
 	finalURL := c.baseURL + url
 

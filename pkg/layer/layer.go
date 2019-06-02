@@ -3,7 +3,6 @@ package layer
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/olekukonko/tablewriter"
@@ -40,7 +39,7 @@ func LayersToTable(layers []mapbox.Layer) (string, error) {
 
 	for _, layer := range layers {
 		rowData := []string{
-			layer.Id,
+			layer.ID,
 			layer.Type,
 			layer.Source,
 			layer.SourceLayer,
@@ -75,12 +74,12 @@ func LayerToJSON(layer mapbox.Layer) (string, error) {
 	return string(b), nil
 }
 
-func GetAll(outputFormat string, accessToken string, username string, styleId string, draft bool) (string, error) {
+func GetAll(outputFormat string, accessToken string, username string, styleID string, draft bool) (string, error) {
 	if err := checkFormatAvailable(outputFormat); err != nil {
 		return "", err
 	}
 
-	style, err := mapbox.GetStyle(accessToken, username, styleId, draft)
+	style, err := mapbox.GetStyle(accessToken, username, styleID, draft)
 	if err != nil {
 		return "", err
 	}
@@ -93,38 +92,44 @@ func GetAll(outputFormat string, accessToken string, username string, styleId st
 	return s, nil
 }
 
-func Get(outputFormat string, accessToken string, username string, styleId string, layerId string, draft bool) (string, error) {
+func Get(outputFormat string, accessToken string, username string, styleID string, layerID string, draft bool) (string, error) {
 	if err := checkFormatAvailable(outputFormat); err != nil {
 		return "", err
 	}
 
-	style, err := mapbox.GetStyle(accessToken, username, styleId, draft)
+	style, err := mapbox.GetStyle(accessToken, username, styleID, draft)
 	if err != nil {
 		return "", err
 	}
 
 	for _, layer := range style.Layers {
-		if layer.Id == layerId {
+		if layer.ID == layerID {
 			return formatLayer(layer, outputFormat)
 		}
 	}
 
-	return "", fmt.Errorf("could not find layer with id %v", layerId)
+	return "", fmt.Errorf("could not find layer with id %v", layerID)
 }
 
-func SetTileset(accessToken string, username string, styleId string, layerId string, draft bool, newTilesetId string) error {
-	return errors.New("Not implemented...")
+func SetTileset(accessToken string, username string, styleID string, layerID string, draft bool, newTilesetID string) error {
+	style, err := mapbox.GetStyle(accessToken, username, styleID, draft)
+	if err != nil {
+		return err
+	}
 
-	// style, err := mapbox.GetStyle(accessToken, username, styleId, draft)
-	// if err != nil {
-	// 	return "", err
-	// }
+	for index, layer := range style.Layers {
+		if layer.ID == layerID {
+			style.Modified = nil
+			style.Created = nil
+			style.Layers[index].SourceLayer = newTilesetID
 
-	// for _, layer := range style.Layers {
-	// 	if layer.Id == layerId {
-	// 		return formatLayer(layer, outputFormat)
-	// 	}
-	// }
+			err := mapbox.UpdateStyle(accessToken, username, styleID, draft, *style)
+			if err != nil {
+				return err
+			}
+			return nil
+		}
+	}
 
-	// return "", fmt.Errorf("could not find layer with id %v", layerId)
+	return fmt.Errorf("could not find layer with id %v", layerID)
 }

@@ -9,12 +9,12 @@ import (
 
 // ! Explicit by design
 var flagHelp map[string]string = map[string]string{
-	"access-token":   fmt.Sprintf("Access token is required, provide with --access-token, %v_ACCESS_TOKEN or config", ENV_PREFIX),
-	"username":       fmt.Sprintf("Username is required, provide with --username, %v_USERNAME or config", ENV_PREFIX),
-	"style-id":       fmt.Sprintf("Style ID is required, provide with --style-id, %v_STYLE_ID or config", ENV_PREFIX),
-	"layer-id":       "Layer ID is required, provide with --layer-id",
-	"dataset-id":     "Dataset ID is required, provide with --dataset-id",
-	"new-tileset-id": "New tileset ID is required, provide with --new-dataset-id",
+	"access-token": fmt.Sprintf("Access token is required, provide with --access-token, %v_ACCESS_TOKEN or config", ENV_PREFIX),
+	"username":     fmt.Sprintf("Username is required, provide with --username, %v_USERNAME or config", ENV_PREFIX),
+	"style-id":     fmt.Sprintf("Style ID is required, provide with --style-id, %v_STYLE_ID or config", ENV_PREFIX),
+	"layer-id":     "Layer ID is required, provide with --layer-id",
+	"dataset-id":   "Dataset ID is required, provide with --dataset-id",
+	"tileset-id":   "Tileset ID is required, provide with --tileset-id",
 }
 
 func exitIfMissing(flagNames []string) error {

@@ -18,6 +18,9 @@ func GetDefaultClient(accessToken string) httpclient.Client {
 		DefaultQueryParams: map[string]interface{}{
 			"access_token": accessToken,
 		},
+		DefaultHeaders: map[string]string{
+			"Content-Type": "application/json",
+		},
 	}
 
 	return httpclient.NewClient().WithConfig(&clientConfig)
