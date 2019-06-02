@@ -1,4 +1,4 @@
-package resource
+package mapbox
 
 import (
 	"encoding/json"
@@ -19,6 +19,14 @@ type ListStyle struct {
 	Modified   time.Time `json:"modified"`
 	Owner      string    `json:"owner"`
 	Visibility string    `json:"visibility"`
+}
+
+func GetTableHeader() string {
+	return "name, version"
+}
+
+func (row *ListStyle) AsTableRow() string {
+	return "abc123, 2"
 }
 
 func GetStyles(accessToken string, username string) ([]ListStyle, error) {

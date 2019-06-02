@@ -1,4 +1,4 @@
-package resource
+package mapbox
 
 var styleItemExample = []byte(`[
 	{
