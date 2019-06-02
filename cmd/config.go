@@ -1,6 +1,11 @@
 package cmd
 
 import (
+	"fmt"
+	"strings"
+
+	"github.com/sebnyberg/mapboxcli/pkg/config"
+
 	"github.com/spf13/viper"
 
 	"github.com/spf13/cobra"
@@ -8,15 +13,15 @@ import (
 
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "mbstyle config - store configuration for re-use",
-	Long: `mbstyle config
-Stores commandline flags for re-use in ~/.mapboxcli/config.yml
+	Short: "manage configuration",
+	Long: `mapbox config
+Stores configuration in ~/.mapboxcli/config.yml
 
 Supported commands:
 
-mbstyle config set --username myuser --access-token mytoken --style-id abc123
-mbstyle config reset
-mbstyle config show
+mapbox config set --username myuser --access-token mytoken --style-id abc123
+mapbox config reset
+mapbox config show
 
 Flags set in the config will be automatically passed to other commands.
 
@@ -31,30 +36,63 @@ Precedence ordering:
 }
 
 var setConfigCmd = &cobra.Command{
-	Use:   "config",
-	Short: "mbstyle config set - set configuration for re-use",
-	Long: `mbstyle config set --<flagname> <value>
+	Use:   "set",
+	Short: "set configuration",
+	Long: `mapbox config set --<flagname> <value>
+
 Stores commandline flags for re-use in ~/.mapboxcli/config.yml
 
 Supported flags:
 
---username
---access-token
---style-id
-`,
+--` + strings.Join(config.GetOptions(), "\n--"),
 	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Help()
+		err := config.Write()
+		if err != nil {
+			fmt.Printf("Failed to set config: %v\n", err)
+			fmt.Println("See `mapbox config set --help`")
+		}
+	},
+}
+
+var resetConfigCmd = &cobra.Command{
+	Use:   "reset",
+	Short: "reset configuration",
+	Long: `mapbox config reset
+
+Resets configuration by deleting ~/.mapboxcli/config.yml`,
+	Run: func(cmd *cobra.Command, args []string) {
+		config.Reset()
+	},
+}
+
+var showConfigCmd = &cobra.Command{
+	Use:   "show",
+	Short: "show current configuration",
+	Long: `mapbox config show 
+
+Lists configuration options found in ~/.mapboxcli/config.yml`,
+	Run: func(cmd *cobra.Command, args []string) {
+		s, err := config.String()
+		if err != nil {
+			fmt.Println("Configuration not set. See `mapbox config set`")
+		} else {
+			fmt.Print(s)
+		}
 	},
 }
 
 func init() {
-	configCmd.PersistentFlags().StringP("username", "u", "", "Username")
-	configCmd.PersistentFlags().String("access-token", "", "Access token")
-	configCmd.PersistentFlags().String("style-id", "", "Style id")
+	setConfigCmd.Flags().StringP("username", "u", "", "Username")
+	setConfigCmd.Flags().String("access-token", "", "Access token")
+	setConfigCmd.Flags().String("style-id", "", "Style id")
 
-	viper.BindPFlag("access-token", configCmd.Flags().Lookup("access-token"))
-	viper.BindPFlag("username", configCmd.Flags().Lookup("username"))
-	viper.BindPFlag("style-id", configCmd.Flags().Lookup("style-id"))
+	viper.BindPFlag("access-token", setConfigCmd.Flags().Lookup("access-token"))
+	viper.BindPFlag("username", setConfigCmd.Flags().Lookup("username"))
+	viper.BindPFlag("style-id", setConfigCmd.Flags().Lookup("style-id"))
+
+	configCmd.AddCommand(setConfigCmd)
+	configCmd.AddCommand(resetConfigCmd)
+	configCmd.AddCommand(showConfigCmd)
 
 	rootCmd.AddCommand(configCmd)
 }

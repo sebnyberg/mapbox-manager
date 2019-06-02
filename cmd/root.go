@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/sebnyberg/mbstyle/pkg/config"
+	"github.com/sebnyberg/mapboxcli/pkg/config"
 
 	"github.com/spf13/viper"
 
@@ -13,9 +13,9 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "mbstyle",
-	Short: "mbstyle is a CLI wrapper for the Mapbox API",
-	Long: `mbstyle - a CLI wrapper for the Mapbox API
+	Use:   "mapbox",
+	Short: "mapbox - CLI wrapper for the Mapbox API",
+	Long: `mapbox - CLI wrapper for the Mapbox API
 
 The access token and username can be set as environment variables
 MAPBOX_ACCESS_TOKEN and MAPBOX_USERNAME respectively.
@@ -48,7 +48,9 @@ func init() {
 	replacer := strings.NewReplacer("-", "_")
 	viper.SetEnvKeyReplacer(replacer)
 
-	viper.AddConfigPath(config.GetConfigPath())
+	viper.AddConfigPath(config.GetDir())
+
+	viper.ReadInConfig()
 
 	// rootCmd.PersistentFlags().String("access-token", "", "Mapbox access token")
 	// viper.BindPFlag("access-token", rootCmd.PersistentFlags().Lookup("access-token"))
