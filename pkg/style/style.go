@@ -92,7 +92,7 @@ func StyleToJson(style mapbox.Style) (string, error) {
 	return string(b), nil
 }
 
-func GetAll(accessToken string, username string, outputFormat string) (string, error) {
+func GetAll(outputFormat string, accessToken string, username string) (string, error) {
 	if err := checkFormatAvailable(outputFormat); err != nil {
 		return "", err
 	}
@@ -110,7 +110,7 @@ func GetAll(accessToken string, username string, outputFormat string) (string, e
 	return s, nil
 }
 
-func Get(accessToken string, username string, styleId string, outputFormat string, draft bool) (string, error) {
+func Get(outputFormat string, accessToken string, username string, styleId string, draft bool) (string, error) {
 	if err := checkFormatAvailable(outputFormat); err != nil {
 		return "", err
 	}
