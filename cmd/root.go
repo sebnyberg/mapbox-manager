@@ -40,8 +40,10 @@ func Execute() {
 	}
 }
 
+const ENV_PREFIX string = "MAPBOX"
+
 func init() {
-	viper.SetEnvPrefix("MAPBOX")
+	viper.SetEnvPrefix(ENV_PREFIX)
 	viper.AutomaticEnv()
 
 	// MAPBOX_MY_VAR -> my-var

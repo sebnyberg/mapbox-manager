@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/sebnyberg/mapboxcli/pkg/style"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -34,6 +35,9 @@ Note: listed styles contain less detail than styles retrieved in isolation.
 For more detailed information about a style, use
 	mapbox get style`,
 	Run: func(cmd *cobra.Command, args []string) {
+		
+		exitIfMissing([]string{"username", "access-token"})
+
 		username := viper.GetString("username")
 		accessToken := viper.GetString("access-token")
 
