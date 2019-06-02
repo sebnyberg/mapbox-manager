@@ -8,16 +8,16 @@ import (
 )
 
 type ListStyle struct {
-	Version    int32     `json:"version"`
+	Id         string    `json:"id"`
 	Name       string    `json:"name"`
+	Owner      string    `json:"owner"`
+	Version    int32     `json:"version"`
 	Center     []float64 `json:"center"`
 	Zoom       float64   `json:"zoom"`
 	Bearing    float64   `json:"bearing"`
 	Pitch      float64   `json:"pitch"`
 	Created    time.Time `json:"created"`
-	Id         string    `json:"id"`
 	Modified   time.Time `json:"modified"`
-	Owner      string    `json:"owner"`
 	Visibility string    `json:"visibility"`
 }
 
@@ -55,12 +55,6 @@ func GetStyles(accessToken string, username string) ([]ListStyle, error) {
 	if err := json.Unmarshal(res.Payload, &styles); err != nil {
 		log.Fatalf("failed to parse styles: %v", err)
 	}
-
-	out, err := json.Marshal(styles)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(string(out))
 
 	return styles, nil
 }

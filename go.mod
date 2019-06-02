@@ -9,6 +9,7 @@ require (
 	github.com/gobuffalo/envy v1.7.0 // indirect
 	github.com/gohugoio/hugo v0.55.6
 	github.com/mongodb/mongo-go-driver v1.0.2 // indirect
+	github.com/olekukonko/tablewriter v0.0.0-20180506121414-d4647c9c7a84
 	github.com/russross/blackfriday v2.0.0+incompatible // indirect
 	github.com/sebnyberg/gchat v0.0.0-20190326111204-abcc93d2e8fc
 	github.com/spf13/cobra v0.0.3
