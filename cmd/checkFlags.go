@@ -15,6 +15,8 @@ var flagHelp map[string]string = map[string]string{
 	"layer-id":     "Layer ID is required, provide with --layer-id",
 	"dataset-id":   "Dataset ID is required, provide with --dataset-id",
 	"tileset-id":   "Tileset ID is required, provide with --tileset-id",
+	"layer-to-tileset": `Layer to tileset mapping is required, 
+Example: --layer-to-tileset 'layer1=tileset1,layer2=tileset2'`,
 }
 
 func exitIfMissing(flagNames []string) error {
