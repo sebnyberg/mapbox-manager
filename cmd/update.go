@@ -63,7 +63,7 @@ var updateLayerSetTilesetCmd = &cobra.Command{
 		}
 		if printResponse {
 			var prettyJSON bytes.Buffer
-			err := json.Indent(&prettyJSON, respBytes, "", "\t")
+			err := json.Indent(&prettyJSON, respBytes, "", "  ")
 			if err != nil {
 				return err
 			}
