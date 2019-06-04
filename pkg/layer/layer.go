@@ -114,7 +114,7 @@ func Get(outputFormat string, accessToken string, username string, styleID strin
 func SetTileset(accessToken string, username string, styleID string, layerID string, draft bool, newTilesetID string) ([]byte, error) {
 	style, err := mapbox.GetStyle(accessToken, username, styleID, draft)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	for index, layer := range style.Layers {
