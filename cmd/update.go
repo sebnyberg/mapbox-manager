@@ -77,7 +77,7 @@ var updateLayerCmd = &cobra.Command{
 func init() {
 	updateCmd.PersistentFlags().StringP("username", "u", "", "username (required)")
 	updateCmd.PersistentFlags().String("access-token", "", "access token (required)")
-	updateCmd.PersistentFlags().BoolP("print-response", false, "p", "print response from Mapbox API")
+	updateCmd.PersistentFlags().BoolP("print-response", "p", false, "print response from Mapbox API")
 
 	// update layer
 	updateLayerCmd.PersistentFlags().String("style-id", "", "style id")
