@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 
 	"github.com/sebnyberg/mapboxcli/pkg/layer"
@@ -21,6 +23,7 @@ var updateCmd = &cobra.Command{
 func bindUpdateFlags() {
 	viper.BindPFlag("access-token", updateCmd.PersistentFlags().Lookup("access-token"))
 	viper.BindPFlag("username", updateCmd.PersistentFlags().Lookup("username"))
+	viper.BindPFlag("print-response", updateCmd.PersistentFlags().Lookup("print-response"))
 }
 
 func bindUpdateLayerFlags() {
@@ -59,10 +62,15 @@ var updateLayerSetTilesetCmd = &cobra.Command{
 			return err
 		}
 		if printResponse {
-			fmt.Println(string(respBytes))
+			var prettyJSON bytes.Buffer
+			err := json.Indent(&prettyJSON, respBytes, "", "\t")
+			if err != nil {
+				return err
+			}
+			fmt.Println(string(prettyJSON.Bytes()))
+		} else {
+			fmt.Printf("Successfully set the tileset of layer %v to %v\n", layerID, newTilesetID)
 		}
-
-		fmt.Printf("Successfully set the tileset of layer %v to %v\n", layerID, newTilesetID)
 
 		return nil
 	},
