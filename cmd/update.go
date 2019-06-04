@@ -50,12 +50,16 @@ var updateLayerSetTilesetCmd = &cobra.Command{
 		styleID := viper.GetString("style-id")
 		layerID := viper.GetString("layer-id")
 		draft := viper.GetBool("draft")
+		printResponse := viper.GetBool("print-response")
 
 		newTilesetID := viper.GetString("tileset-id")
 
-		err = layer.SetTileset(accessToken, username, styleID, layerID, draft, newTilesetID)
+		respBytes, err := layer.SetTileset(accessToken, username, styleID, layerID, draft, newTilesetID)
 		if err != nil {
 			return err
+		}
+		if printResponse {
+			fmt.Println(string(respBytes))
 		}
 
 		fmt.Printf("Successfully set the tileset of layer %v to %v\n", layerID, newTilesetID)
@@ -73,6 +77,7 @@ var updateLayerCmd = &cobra.Command{
 func init() {
 	updateCmd.PersistentFlags().StringP("username", "u", "", "username (required)")
 	updateCmd.PersistentFlags().String("access-token", "", "access token (required)")
+	updateCmd.PersistentFlags().BoolP("print-response", false, "p", "print response from Mapbox API")
 
 	// update layer
 	updateLayerCmd.PersistentFlags().String("style-id", "", "style id")

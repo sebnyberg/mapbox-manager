@@ -93,7 +93,7 @@ func GetStyle(accessToken string, username string, styleId string, draft bool) (
 	return &style, nil
 }
 
-func UpdateStyle(accessToken string, username string, styleId string, draft bool, style Style) error {
+func UpdateStyle(accessToken string, username string, styleId string, draft bool, style Style) ([]byte, error) {
 	client := GetDefaultClient(accessToken)
 
 	endpoint := fmt.Sprintf("/styles/v1/%v/%v", username, styleId)
@@ -104,17 +104,17 @@ func UpdateStyle(accessToken string, username string, styleId string, draft bool
 
 	b, err := json.Marshal(&style)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	res, err := client.Patch(endpoint, nil, nil, b)
 	if err != nil {
-		return fmt.Errorf("failed to update style: %v", err)
+		return nil, fmt.Errorf("failed to update style: %v", err)
 	}
 
 	if res.StatusCode == 422 {
-		return fmt.Errorf("style was improperly formatted: %v", GetErrorMessage(res.StatusCode, res.Payload))
+		return nil, fmt.Errorf("style was improperly formatted: %v", GetErrorMessage(res.StatusCode, res.Payload))
 	}
 
-	return nil
+	return res.Payload, nil
 }

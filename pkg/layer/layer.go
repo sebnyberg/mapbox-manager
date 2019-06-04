@@ -111,7 +111,7 @@ func Get(outputFormat string, accessToken string, username string, styleID strin
 	return "", fmt.Errorf("could not find layer with id %v", layerID)
 }
 
-func SetTileset(accessToken string, username string, styleID string, layerID string, draft bool, newTilesetID string) error {
+func SetTileset(accessToken string, username string, styleID string, layerID string, draft bool, newTilesetID string) ([]byte, error) {
 	style, err := mapbox.GetStyle(accessToken, username, styleID, draft)
 	if err != nil {
 		return err
@@ -123,13 +123,13 @@ func SetTileset(accessToken string, username string, styleID string, layerID str
 			style.Created = nil
 			style.Layers[index].SourceLayer = newTilesetID
 
-			err := mapbox.UpdateStyle(accessToken, username, styleID, draft, *style)
+			respBytes, err := mapbox.UpdateStyle(accessToken, username, styleID, draft, *style)
 			if err != nil {
-				return err
+				return nil, err
 			}
-			return nil
+			return respBytes, nil
 		}
 	}
 
-	return fmt.Errorf("could not find layer with id %v", layerID)
+	return nil, fmt.Errorf("could not find layer with id %v", layerID)
 }
