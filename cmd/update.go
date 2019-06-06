@@ -57,7 +57,6 @@ var updateLayerSetTilesetCmd = &cobra.Command{
 		styleID := viper.GetString("style-id")
 		layerID := viper.GetString("layer-id")
 		draft := viper.GetBool("draft")
-		printResponse := viper.GetBool("print-response")
 
 		newTilesetID := viper.GetString("tileset-id")
 
