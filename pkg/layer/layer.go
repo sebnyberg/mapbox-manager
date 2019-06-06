@@ -111,17 +111,10 @@ func Get(outputFormat string, accessToken string, username string, styleID strin
 	return "", fmt.Errorf("could not find layer with id %v", layerID)
 }
 
-<<<<<<< HEAD
-func SetTileset(accessToken string, username string, styleID string, layerID string, draft bool, newTilesetID string) ([]byte, error) {
-	style, err := mapbox.GetStyle(accessToken, username, styleID, draft)
-	if err != nil {
-		return nil, err
-=======
 func SetTileset(accessToken string, username string, styleID string, layerID string, draft bool, newTilesetID string) (string, error) {
 	style, err := mapbox.GetStyle(accessToken, username, styleID, draft)
 	if err != nil {
 		return "", err
->>>>>>> 6974440... Improve update command to take into account sources
 	}
 
 	for index, layer := range style.Layers {
@@ -132,15 +125,6 @@ func SetTileset(accessToken string, username string, styleID string, layerID str
 
 			respBytes, err := mapbox.UpdateStyle(accessToken, username, styleID, draft, *style)
 			if err != nil {
-<<<<<<< HEAD
-				return nil, err
-			}
-			return respBytes, nil
-		}
-	}
-
-	return nil, fmt.Errorf("could not find layer with id %v", layerID)
-=======
 				return "", err
 			}
 			return string(respBytes), nil
@@ -148,5 +132,4 @@ func SetTileset(accessToken string, username string, styleID string, layerID str
 	}
 
 	return "", fmt.Errorf("could not find layer with id %v", layerID)
->>>>>>> 6974440... Improve update command to take into account sources
 }
