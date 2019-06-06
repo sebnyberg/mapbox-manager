@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 
 	"github.com/sebnyberg/mapboxcli/pkg/layer"
@@ -63,29 +61,12 @@ var updateLayerSetTilesetCmd = &cobra.Command{
 
 		newTilesetID := viper.GetString("tileset-id")
 
-<<<<<<< HEAD
-		respBytes, err := layer.SetTileset(accessToken, username, styleID, layerID, draft, newTilesetID)
-		if err != nil {
-			return err
-		}
-		if printResponse {
-			var prettyJSON bytes.Buffer
-			err := json.Indent(&prettyJSON, respBytes, "", "  ")
-			if err != nil {
-				return err
-			}
-			fmt.Println(string(prettyJSON.Bytes()))
-		} else {
-			fmt.Printf("Successfully set the tileset of layer %v to %v\n", layerID, newTilesetID)
-		}
-=======
 		updateResponse, err := layer.SetTileset(accessToken, username, styleID, layerID, draft, newTilesetID)
 		if err != nil {
 			return err
 		}
 
 		fmt.Println(updateResponse)
->>>>>>> 6974440... Improve update command to take into account sources
 
 		return nil
 	},
