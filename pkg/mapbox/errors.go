@@ -8,6 +8,7 @@ import (
 
 var statusErrors map[int]string = map[int]string{
 	401: "please verify usename and access token",
+	403: "forbidden",
 	422: "payload improperly formatted",
 }
 

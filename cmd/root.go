@@ -26,7 +26,7 @@ var versionCmd = &cobra.Command{
 	Short: "Print the version",
 	Long:  "Print the version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("mapbox cli version %v", "0.1.0")
+		fmt.Printf("mapbox cli version %v\n", "0.1.0")
 	},
 }
 

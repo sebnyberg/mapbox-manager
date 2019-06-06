@@ -47,6 +47,7 @@ require (
 	github.com/spf13/cobra v0.0.4
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/objx v0.2.0 // indirect
+	github.com/stretchr/testify v1.3.0
 	github.com/tdewolff/minify/v2 v2.5.0 // indirect
 	github.com/ugorji/go v1.1.5-pre // indirect
 	go.opencensus.io v0.22.0 // indirect
